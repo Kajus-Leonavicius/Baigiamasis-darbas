@@ -1,0 +1,15 @@
+# Ignore Node.js dependencies (Client)
+Client/node_modules/
+
+# Ignore Python virtual environment (Backend)
+Backend/venv/
+
+# Ignore environment files
+*.env
+
+# Ignore build artifacts (Client)
+Client/dist/
+Client/build/
+
+# Ignore logs
+*.log
