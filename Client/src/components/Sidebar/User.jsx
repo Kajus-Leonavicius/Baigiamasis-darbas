@@ -1,7 +1,7 @@
 
-function User() {
+function User({className}) {
   return (
-    <div className="flex justify-center items-center mt-8">
+    <div className={`flex justify-center items-center ${className}`}>
         <div className="rounded-full bg-amber-400 h-8 w-8 flex justify-center items-center">
             <p>JD</p>
         </div>
