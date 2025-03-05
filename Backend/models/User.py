@@ -1,25 +1,62 @@
 from utils.database import db
-from datetime import date
-
-
+from models.associations import user_service, user_vehicle
 
 class User(db.Model):
-    __tablename__ = "users" 
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    surname = db.Column(db.String(100), nullable=True)
-    role = db.Column(db.String(100), default="Customer", nullable=True)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.Date, default=db.func.current_date())
+    __tablename__ = "user"
     
-    vehicles = db.relationship('Veichle', backref="user", lazy=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    surname = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(255), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=True)
+    role = db.Column(db.String(255), nullable=True, default="customer")
+    specialization = db.Column(db.String(255), nullable=True)
+    company_name = db.Column(db.String(255), unique=True, nullable=True)
+    
+    services = db.relationship("Service", secondary=user_service, backref="employees")
+    vehicles = db.relationship("Vehicle", secondary=user_vehicle, backref="owners")
 
-    def __init__(self, email, password, name, surname=None, role="Customer", created_at=None):
+    def __init__(self, name, surname, phone, email, password=None, role="customer", specialization=None, company_name=None):
+        self.name = name
+        self.surname = surname
+        self.phone = phone
         self.email = email
         self.password = password
-        self.name = name
-        self.surname = surname if surname else ""
         self.role = role
-        self.created_at = created_at if created_at else date.today()
+        self.specialization = specialization
+        self.company_name = company_name
+        
+    @staticmethod
+    def get_single_user(email):
+        return User.query.filter_by(email=email).first()
+        
+    @staticmethod
+    def get_all(filters={}):
+        query = User.query
+
+        if "role" in filters:
+            query = query.filter_by(role=filters["role"]) 
+
+        if "user_id" in filters:
+            query = query.filter_by(id=filters["user_id"])
+
+        if "email" in filters:
+            query = query.filter_by(email=filters["email"])
+        return query.all()
+    
+    @staticmethod
+    def create(data):
+        new_user = User(**data)
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user
+    
+    def update(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
