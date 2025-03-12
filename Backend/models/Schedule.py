@@ -1,16 +1,15 @@
 from utils.database import db
-from models.associations import schedule_appointment
 
 class Schedule(db.Model):
     __tablename__ = "schedule"
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    employee_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     date = db.Column(db.Date, nullable=False)
     hours_booked = db.Column(db.Integer, default=0)
 
     employee = db.relationship("User", backref="schedule")
-    appointments = db.relationship("Appointment", secondary=schedule_appointment, backref="schedules")
+    #appointments = db.relationship("Appointment", secondary=schedule_appointment, backref="schedules")
 
     def __init__(self, employee_id, date, hours_booked=0):
         self.employee_id = employee_id

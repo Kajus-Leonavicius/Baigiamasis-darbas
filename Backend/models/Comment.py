@@ -5,10 +5,8 @@ class Comment (db.Model):
     
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     appointment_id = db.Column(db.Integer, db.ForeignKey('appointments.id', ondelete="CASCADE"), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"), nullable=True)
     text = db.Column(db.Text)
-    
-    appointment = db.relationship('Appointment', backref=db.backref('comments', lazy=True))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
     
     def __init__(self, appointment_id, text):
@@ -16,7 +14,7 @@ class Comment (db.Model):
         self.text = text
     
     @staticmethod
-    def add_new(data):
+    def add_new_comment(data):
         new_comment = Comment(**data)
         db.session.add(new_comment)
         db.session.commit()

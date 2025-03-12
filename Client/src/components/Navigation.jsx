@@ -12,8 +12,10 @@ function Navigation() {
                 className={`cursor-pointer px-4 py-2 rounded-md ${location.pathname === '/Appointments' ? 'bg-blue-500 text-white' : null}`}>Appointments</li>
             <li onClick={() => navigate('/Employees')}
                 className={`cursor-pointer px-4 py-2 rounded-md ${location.pathname === '/Employees' ? 'bg-blue-500 text-white' : null}`}>employees</li>
-            <li onClick={() => navigate('/Customer')}
+            <li onClick={() => navigate('/Customers')}
                 className={`cursor-pointer px-4 py-2 rounded-md ${location.pathname === '/Customers' ? 'bg-blue-500 text-white' : null}`}>Customers</li>
+            <li onClick={() => navigate('/Services')}
+                className={`cursor-pointer px-4 py-2 rounded-md ${location.pathname === '/Services' ? 'bg-blue-500 text-white' : null}`}>Services</li>
         </ul>
     </div>
   )

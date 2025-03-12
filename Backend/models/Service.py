@@ -8,7 +8,7 @@ class Service(db.Model):
     description = db.Column(db.String(255), nullable=False)
     duration = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(100), nullable = False, default = "Galima atlikti")
-    required_specialization = db.Column(db.String(100), nullable=False)
+    required_specialization = db.Column(db.String(100), nullable=True)
     
     
 
@@ -20,8 +20,6 @@ class Service(db.Model):
         self.status = status
 
     def get_all(filters={}):
-        """        if "service_id" in filters:
-            query = Service.query.filter_by(id=filters["service_id"])"""
         return Service.query.all()
 
     @staticmethod
