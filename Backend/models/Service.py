@@ -8,22 +8,22 @@ class Service(db.Model):
     description = db.Column(db.String(255), nullable=False)
     duration = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(100), nullable = False, default = "Galima atlikti")
-    required_specialization = db.Column(db.String(100), nullable=True)
+    company_name = db.Column(db.String(255), nullable=False)
     
     
 
-    def __init__(self, service_name, description, required_specialization, status, duration=None):
+    def __init__(self, service_name, description, status, company_name ,duration=None):
         self.service_name = service_name
         self.description = description
         self.duration = duration
-        self.required_specialization = required_specialization
         self.status = status
+        self.company_name = company_name
 
-    def get_all(filters={}):
-        return Service.query.all()
+    def get_all(company_name):
+        return Service.query.filter_by(company_name = company_name).all()
 
     @staticmethod
-    def create(data):
+    def create_new_service(data):
         new_service = Service(**data)
         db.session.add(new_service)
         db.session.commit()
@@ -34,6 +34,12 @@ class Service(db.Model):
             setattr(self, key, value)
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
+    @staticmethod
+    def delete_service(service_id):
+        service = Service.query.get(service_id)
+        if not service:
+            return {"message": "service not found"}, 404 
+
+        db.session.delete(service)
         db.session.commit()
+        return {"message": "service deleted successfully"}

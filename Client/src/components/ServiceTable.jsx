@@ -1,6 +1,22 @@
 import React from 'react'
 
 function ServiceTable({services, getServices}) {
+
+    const deleteService = async (service_id) =>{
+
+        const token = localStorage.getItem('access_token')
+
+        const response = await fetch(`http://127.0.0.1:5000/api/services/delete_service/${service_id}`,{
+            method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    credentials: 'include'
+        })
+        getServices()
+    }
+
   return (
     <div className='w-full'>
             <table className="w-full border-collapse border border-gray-300 shadow-lg rounded-lg overflow-hidden">
@@ -21,7 +37,7 @@ function ServiceTable({services, getServices}) {
                             <td>{service.duration}</td>
                             <td>{service.status}</td>
                             <td>
-                            <button className='bg-red-500 mr-4 p-2 rounded-md text-white'>istrinti</button>
+                            <button className='bg-red-500 mr-4 p-2 rounded-md text-white' onClick={()=>deleteService(service.id)}>istrinti</button>
                             </td>
                         </tr>
                     )) : <td>no services yet</td>}

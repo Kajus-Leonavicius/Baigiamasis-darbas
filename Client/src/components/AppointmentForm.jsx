@@ -30,8 +30,11 @@ function AppointmentForm() {
 
 
     const fetchServices = async () => {
+        const token = localStorage.getItem('access_token')
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/services/get_services",{credentials: 'include',});
+            const response = await fetch("http://127.0.0.1:5000/api/services/get_services",{credentials: 'include',
+                headers:{"Authorization": `Bearer ${token}`}
+            });
             const data = await response.json();
             setServices(data);
         } catch (error) {
