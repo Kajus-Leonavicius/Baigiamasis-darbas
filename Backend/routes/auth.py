@@ -1,5 +1,6 @@
 from utils.database import db
 from models.User import User
+from models.Employee import Employee
 from flask import request, session, jsonify, Blueprint, make_response
 import bcrypt
 from flask_cors import CORS
@@ -11,6 +12,11 @@ auth_bp = Blueprint('auth', __name__)
 
 CORS(auth_bp, supports_credentials=True)
 
+from models.Employee import Employee
+from models.User import User
+import bcrypt
+from flask import request, session, jsonify
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     try:
@@ -21,33 +27,46 @@ def login():
         if not email or not password:
             return jsonify({"message": "Please provide email and password"}), 403
 
+        employee = Employee.get_single_employee(email)
+        if employee and employee.password and bcrypt.checkpw(password.encode("utf-8"), employee.password.encode("utf-8")):
+            access_token = create_access_token(identity=json.dumps({
+            "user_id": employee.id,
+            "role": employee.role,
+            "company_name": employee.company_name
+        }))
+
+            print (employee)
+            return jsonify({
+                "message": "Logged in as employee",
+                "access_token": access_token,
+                "company_name": employee.company_name,
+                "name": employee.name,
+                "role": employee.role,
+                "surname": employee.surname
+            }), 200
+
         user = User.get_single_user(email)
-        if not user:
-            return jsonify({"message": "No such user"}), 404
-
-        if not bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
-            return jsonify({"message": "Invalid email or password"}), 401
-
-        # ✅ Convert identity to a JSON-serializable object
-        identity_data = json.dumps({
-            "user_id": str(user.id),
-            "company_name": user.company_name
-        })
-
-        print(f"🔍 Identity Data Before Token Generation: {identity_data}")  # ✅ Debug
-
-        access_token = create_access_token(identity=identity_data)
-
-        return jsonify({
-            "message": "Successfully logged in",
-            "access_token": access_token,
+        if user and user.password and bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
+            access_token = create_access_token(identity=json.dumps({
             "user_id": user.id,
             "company_name": user.company_name
-        }), 200
+            
+        }))
+            return jsonify({
+                "message": "Logged in as company owner",
+                "access_token": access_token,
+                "name": user.name,
+                "role": 'owner',
+                "surname": user.surname,
+                "company_name": user.company_name,
+            }), 200
+
+        return jsonify({"message": "netinkamas slaptažodis arba prisijungimo vardas"}), 401
 
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({"message": "Internal error occurred"}), 500
+
 
     
 @auth_bp.route("/register", methods = ["POST"])

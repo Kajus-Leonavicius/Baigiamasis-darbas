@@ -25,7 +25,6 @@ function ServiceTable({services, getServices}) {
                         <th className="p-3 text-left">Pavadinimas</th>
                         <th className="p-3 text-left">Aprasymas</th>
                         <th className="p-3 text-left">Trukme</th>
-                        <th className="p-3 text-left">busena</th>
                         <th className="p-3 text-left">Veiksmai</th>
                     </tr>
                 </thead>
@@ -35,7 +34,6 @@ function ServiceTable({services, getServices}) {
                             <td>{service.service_name}</td>
                             <td>{service.description}</td>
                             <td>{service.duration}</td>
-                            <td>{service.status}</td>
                             <td>
                             <button className='bg-red-500 mr-4 p-2 rounded-md text-white' onClick={()=>deleteService(service.id)}>istrinti</button>
                             </td>

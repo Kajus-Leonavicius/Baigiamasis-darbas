@@ -21,6 +21,7 @@ from routes.comments import comment_bp
 from routes.customers import customer_bp
 import os
 from flask_jwt_extended import JWTManager
+from utils.extantions import mail
 
 app = Flask(__name__)
 # Configurations
@@ -31,13 +32,18 @@ app.config["JWT_SECRET_KEY"] = "your_very_secure_secret"
 app.config["JWT_IDENTITY_CLAIM"] = "sub"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'kajusleonaviciuss@gmail.com'
+app.config['MAIL_PASSWORD'] = 'abqj roxj jirg javv'
+
+mail.init_app(app)
 jwt = JWTManager(app)
 
 CORS(app, supports_credentials=True)
-#origins=["http://localhost:5173"]
 
-
-# Initialize extensions
 db.init_app(app)
 bcrypt = Bcrypt(app)
 Migrate(app, db)
@@ -50,7 +56,7 @@ def add_cors_headers(response):
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return response
 
-# Register blueprints
+
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
 app.register_blueprint(services_bp, url_prefix="/api/services")
 app.register_blueprint(appointment_bp, url_prefix="/api/appointments")
@@ -58,7 +64,9 @@ app.register_blueprint(employees_bp, url_prefix="/api/employees")
 app.register_blueprint(comment_bp, url_prefix="/api/comments")
 app.register_blueprint(customer_bp, url_prefix="/api/customers")
 
-# Create all tables (if not already created)
+
+
+
 with app.app_context():
     db.create_all()
 

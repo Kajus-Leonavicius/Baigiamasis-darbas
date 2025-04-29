@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+
 import { useEffect } from 'react'
 import Modal from '../components/Modal'
 
@@ -29,16 +29,21 @@ function DataTable({employees, getEmployees}) {
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                        {employees && (employees.map((employee, index)=>(
-                            <tr className="hover:bg-gray-100 transition duration-200" key={index}>
-                                <td className='p-3'>{employee.name} {employee.surname}</td>
-                                <td>{employee.role}</td>
-                                <td>
-                                    <button onClick={()=> deleteEmployee(employee.id)} className='bg-red-500 mr-4 p-2 rounded-md text-white'>istrinti</button>
-                                    {/*<button className='bg-green-500 mr-4 p-2 rounded-md text-white'>redaguoti</button>*/}
-                                </td>
-                            </tr>
-                        )))}
+                {employees && employees.length > 0 ? (
+                    employees.map((employee, index) => (
+                        <tr className="hover:bg-gray-100 transition duration-200" key={index}>
+                        <td className='p-3'>{employee.name} {employee.surname}</td>
+                        <td>{employee.role}</td>
+                        <td>
+                            <button onClick={() => deleteEmployee(employee.id)} className='bg-red-500 mr-4 p-2 rounded-md text-white'>Ištrinti</button>
+                        </td>
+                        </tr>
+                    ))
+                    ) : (
+  <tr>
+    <td colSpan="3" className="text-center p-3">Darbuotojų nėra</td>
+  </tr>
+)}
                 </tbody>
             </table>
         </div>

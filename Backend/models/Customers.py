@@ -7,8 +7,8 @@ class Customer(db.Model):
     company_name = db.Column(db.String(255), db.ForeignKey("users.company_name"), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     surname = db.Column(db.String(255), nullable=False)
-    phone = db.Column(db.String(255), unique=True, nullable=True)
-    email = db.Column(db.String(255), unique=True, nullable=True)
+    phone = db.Column(db.String(255), unique=False, nullable=True)
+    email = db.Column(db.String(255), unique=False, nullable=True)
 
     vehicles = db.relationship("Vehicle", backref="owner", lazy=True, cascade="all, delete-orphan")
 

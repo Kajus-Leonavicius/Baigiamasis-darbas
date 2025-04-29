@@ -63,7 +63,8 @@ useEffect(()=>{
       email: newEmployee.email,
       phone: newEmployee.phone,
       role: newEmployee.role,
-      company_name: company_name
+      company_name: company_name,
+      password: newEmployee.password
     }
     const response = await fetch('http://127.0.0.1:5000/api/employees/create_employee',{
       method: 'POST',
@@ -74,14 +75,14 @@ useEffect(()=>{
     if(!response.ok){
       throw new Error('failed to create employee')
     }
-    setNewEmployee({ name: '', surname: '', role: '', phone: '', email: ''});
+    setNewEmployee({ name: '', surname: '', role: '', phone: '', email: '', password: ''});
     setModal(false)
     getEmployees()
   }
   return (
     <div className='h-full flex w-full'>
       {modal &&(
-        <Modal title={"Add new employee"} close={()=>setModal(false)}>
+        <Modal title={"Naujas Darbuotojas"} close={()=>setModal(false)}>
           <div className='items-center flex flex-col justify-center'>
             <div className='flex flex-col mt-4'>
               <label>Vardas</label>
@@ -96,15 +97,19 @@ useEffect(()=>{
               <input type="text" className='border-1 rounded-md' name='role' value={newEmployee.role} onChange={handleInputChange}/>
             </div>
             <div className='flex flex-col mt-2'>
-              <label>tel.nr</label>
+              <label>tel.numeris</label>
               <input type="text" className='border-1 rounded-md' name='phone' value={newEmployee.phone} onChange={handleInputChange}/>
             </div>
             <div className='flex flex-col mt-2'>
-              <label>email</label>
+              <label>El. pašto adresas</label>
               <input type="text" className='border-1 rounded-md' name='email' value={newEmployee.email} onChange={handleInputChange}/>
             </div>
+            <div className='flex flex-col mt-2'>
+              <label>Slaptažodis</label>
+              <input type="text" className='border-1 rounded-md' name='password' value={newEmployee.password} onChange={handleInputChange}/>
+            </div>
             <div>
-              <button className='bg-blue-500 rounded-md p-2 text-white mt-4' onClick={addEmployee}>Add new User</button>
+              <button className='bg-blue-500 rounded-md p-2 text-white mt-4' onClick={addEmployee}>Pridėti naują darbuotoją</button>
             </div>
           </div>
         </Modal>
@@ -112,7 +117,7 @@ useEffect(()=>{
       <Navigation/>
       <div className='w-full'>
         <ToolBar>
-          <button className='border-1 p-0.5 pl-3 pr-3 rounded-md' onClick={()=>setModal(true)}>+ New</button>
+          <button className='border-1 p-0.5 pl-3 pr-3 rounded-md' onClick={()=>setModal(true)}>+ Pridėti nauja darbuotoją</button>
         </ToolBar>
         <DataTable employees={employees} getEmployees={getEmployees}/>
       </div>

@@ -36,7 +36,6 @@ def get_appointments():
             results.append({
                 "id": appointment.id, 
                 "date": str(appointment.datetime),
-                "status": appointment.status,
                 "end_date": str(appointment.end_datetime),
                 "client": {
                     "name": client.name,
@@ -60,11 +59,10 @@ def get_appointments():
                     for e in appointment.employees
                 ]
             })
-        print(f"✅ Sending Appointments Data: {results}")
         return jsonify(results), 200
 
     except Exception as e:
-        print(f"🔥 ERROR in get_appointments(): {str(e)}")
+        print(f" ERROR in get_appointments(): {str(e)}")
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
 
 @appointment_bp.route('/create_appointment', methods=['POST'])

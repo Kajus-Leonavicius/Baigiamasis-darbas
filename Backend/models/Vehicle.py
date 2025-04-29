@@ -3,7 +3,8 @@ from utils.database import db
 class Vehicle(db.Model):
     __tablename__ = "vehicles"
     
-    VIN = db.Column(db.String(17), unique=True, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+    VIN = db.Column(db.String(17), unique=False, nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey("customers.id"), nullable=False)
     make = db.Column(db.String(100), nullable=False)
     model = db.Column(db.String(100), nullable=False)
@@ -21,12 +22,6 @@ class Vehicle(db.Model):
         self.Kw = Kw
         self.license_plate = license_plate
         self.customer_id = customer_id
-
-    @staticmethod
-    def get_all(filters={}):
-        if "VIN" in filters:
-            query = Vehicle.query.filter_by(VIN=filters["VIN"])
-        return query.all()
 
     @staticmethod
     def create_vehicle(data):

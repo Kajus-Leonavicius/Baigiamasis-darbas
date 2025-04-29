@@ -35,6 +35,7 @@ def get_employees():
                 "phone" : employee.phone,
                 "email" : employee.email,
                 "role" : employee.role,
+                'password': employee.password,
             })
         
         return jsonify(response)
@@ -65,7 +66,8 @@ def create_employee():
             'role': data.get('role'),
             'phone': data.get('phone'),
             'email': data.get('email'),
-            'company_name': data.get('company_name')
+            'company_name': data.get('company_name'),
+            'password': data.get('password')
         })
         
         print(new_employee)
@@ -94,4 +96,4 @@ def delete_employee(employee_id):
         return Employee.delete_employee(employee_id)
     except Exception as e: 
         print(f"error occured {str(e)}")
-        return jsonify({'message': 'internal error occured'})
+        return jsonify({'message': 'internal error occured'}),500

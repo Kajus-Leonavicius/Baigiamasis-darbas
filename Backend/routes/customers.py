@@ -52,7 +52,6 @@ def get_customer_appointments(customer_id):
             result.append({
                 "id": app.id,
                 "date": app.datetime,
-                "status": app.status,
                 "Vehicle":{
                     "VIN": vehicle.VIN,
                     "make": vehicle.make,

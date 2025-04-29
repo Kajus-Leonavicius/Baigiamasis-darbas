@@ -16,7 +16,7 @@ appointment_services = db.Table(
 user_vehicle = db.Table(
     "user_vehicle",
     db.Column("user_id", db.Integer, db.ForeignKey("customers.id"), primary_key=True),
-    db.Column("vehicle_VIN", db.String(17), db.ForeignKey("vehicles.VIN"), primary_key=True)
+    db.Column("vehicle_id", db.Integer, db.ForeignKey("vehicles.id"), primary_key=True)
 )
 
 """schedule_appointment = db.Table(

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function AppointmentForm() {
-   //const navigate = useNavigate()
+function AppointmentForm({onSuccess}) {
     const [formData, setFormData] = useState({
         email: "",
         name: "",
@@ -17,7 +16,7 @@ function AppointmentForm() {
         date: "",
         status: "scheduled",
         services: [],
-        employee_ids: []  // ✅ Ensure this is an array
+        employee_ids: []
     });
 
     const [services, setServices] = useState([]); 
@@ -95,17 +94,12 @@ function AppointmentForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
             const token = localStorage.getItem('access_token')
             const companyName = localStorage.getItem('company_name')
-            console.log("company", companyName)
-            
-            
-
         try {
             const formattedData = {
                 ...formData,
-                date: new Date(formData.date).toISOString(),
+                date: formData.date,
                 company_name: companyName,
             };
 
@@ -128,6 +122,7 @@ function AppointmentForm() {
             } else {
                 console.log("Appointment Created:", data);
                 alert("Appointment successfully created!");
+                onSuccess()
             }
         } catch (error) {
             console.error("Fetch error:", error);
@@ -139,7 +134,6 @@ function AppointmentForm() {
             <form onSubmit={handleSubmit} className='flex flex-col items-center'>
                 <div className='flex'>
 
-                    {/* Customer Section */}
                     <div className='flex flex-col mr-20 mt-4 ml-8'>
                         <p className='text-xl'>Klientas</p>
                         <div className='flex '>
@@ -159,7 +153,6 @@ function AppointmentForm() {
                         <input type="text" name="phone" value={formData.phone} onChange={handleChange} className='border-1' required />
                     </div>
 
-                    {/* Vehicle Section */}
                     <div className='flex flex-col mt-4 mr-8'>
                         <p className='text-xl'>Automobilis</p>
                         <div className='flex '>
@@ -197,22 +190,14 @@ function AppointmentForm() {
                     </div>
                 </div>
 
-                {/* Date Picker Section */}
                 <div className="mt-1 w-1/2 flex flex-col">
-                    <label className="text-lg">Pasirinkite laiką</label>
+                    <label className="text-lg">Laikas</label>
                     <input 
-                        type="datetime-local" 
-                        name="date" 
-                        value={formData.date} 
-                        onChange={handleChange} 
-                        className="border-1 p-2 mt-1 rounded-md" 
-                        required 
-                    />
+                        type="datetime-local" name="date" value={formData.date} onChange={handleChange} className="border-1 p-2 mt-1 rounded-md" required />
                 </div>
 
-                {/* Service Selection */}
                 <div className="mt-1 w-1/2 h-auto flex flex-col">
-                    <label className="text-lg">Select Services</label>
+                    <label className="text-lg">Paslaugos</label>
                     <select multiple value={formData.services} onChange={handleServiceSelection} className="border-1 p-2 mt-1 rounded-md">
                         {services.map(service => (
                             <option key={service.id} value={service.id}>
@@ -222,19 +207,21 @@ function AppointmentForm() {
                     </select>
                 </div>
 
-                {/* Employee Selection */}
                 <div className="mt-1 w-1/2 flex flex-col">
-                    <label className="text-lg">Select Employees</label>
+                    <label className="text-lg">Darbuotojas</label>
                     <select multiple value={formData.employee_ids} onChange={handleEmployeeSelection} className="border-1 p-2 mt-1 rounded-md">
-                        {employees.map(employee => (
-                            <option key={employee.id} value={employee.id}>
-                                {employee.name} {employee.surname} ({employee.specialization})
-                            </option>
-                        ))}
+                    {employees && employees.length > 0 ? (
+                    employees.map(employee => (
+                        <option key={employee.id} value={employee.id}>
+                        {employee.name} {employee.surname} ({employee.specialization})
+                        </option>
+                    ))
+                    ) : (
+                    <option disabled>Nėra darbuotojų</option>
+                    )}
                     </select>
                 </div>
 
-                {/* Submit Button */}
                 <button className='mt-8 mb-8 bg-blue-500 w-48 text-white rounded-md p-2' type='submit'>
                     Registruoti
                 </button>

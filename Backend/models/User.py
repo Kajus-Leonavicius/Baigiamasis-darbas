@@ -51,11 +51,6 @@ class User(db.Model):
         db.session.add(new_user)
         db.session.commit()
         return new_user
-    
-    def update(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
-        db.session.commit()
 
     def delete(self):
         db.session.delete(self)

@@ -10,7 +10,7 @@ def get_comments():
     comments = Comment.get_all(filter="appointment_id")
     
     if not comments:
-        return jsonify({'message': 'no comments yet'})
+        return jsonify({'message': 'kolkas komentaru nera'})
     
     data= []
     for c in comments:

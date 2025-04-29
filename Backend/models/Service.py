@@ -29,11 +29,6 @@ class Service(db.Model):
         db.session.commit()
         return new_service
 
-    def update(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
-        db.session.commit()
-
     @staticmethod
     def delete_service(service_id):
         service = Service.query.get(service_id)

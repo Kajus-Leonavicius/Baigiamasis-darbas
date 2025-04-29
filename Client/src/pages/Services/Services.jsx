@@ -77,7 +77,7 @@ function Services() {
   return (
     <div className='w-full h-full flex'>
         {modal && (
-            <Modal title={"add New Service"} close={()=>setModal(false)}>
+            <Modal title={"Nauja paslauga"} close={()=>setModal(false)}>
                 <div className='items-center flex flex-col justify-center'>
                     <div className='flex flex-col mt-4'>
                         <label>Paslaugos pavadinimas</label>
@@ -96,7 +96,7 @@ function Services() {
                         <input type="text" className='border-1 rounded-md' name='status' value={newService.status} onChange={handleInputChange}/>
                     </div>
                     <div>
-                        <button className='bg-blue-500 rounded-md p-2 text-white mt-4' onClick={addNewService}>Add new User</button>
+                        <button className='bg-blue-500 rounded-md p-2 text-white mt-4' onClick={addNewService}> pridėti paslaugą</button>
                     </div>
                 </div>
             </Modal>
@@ -104,7 +104,7 @@ function Services() {
         <Navigation/>
         <div className='w-full h-full'>
             <ToolBar>
-                <button className='border-1 p-0.5 pl-3 pr-3 rounded-md' onClick={()=>setModal(true)}>+ New</button>
+                <button className='border-1 p-0.5 pl-3 pr-3 rounded-md' onClick={()=>setModal(true)}>+ Pridėti naują paslaugą</button>
             </ToolBar>
             <ServiceTable services={services} getServices={getServices}/>
         </div>
