@@ -2,29 +2,29 @@ from utils.database import db
 from models.associations import user_service, user_vehicle
 
 class User(db.Model):
-    __tablename__ = "user"
+    __tablename__ = "users"
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     surname = db.Column(db.String(255), nullable=False)
-    phone = db.Column(db.String(255), unique=True, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
+    phone = db.Column(db.String(255), unique=True, nullable=True)
+    email = db.Column(db.String(255), unique=True, nullable=True)
     password = db.Column(db.String(255), nullable=True)
-    role = db.Column(db.String(255), nullable=True, default="customer")
-    specialization = db.Column(db.String(255), nullable=True)
     company_name = db.Column(db.String(255), unique=True, nullable=True)
     
     services = db.relationship("Service", secondary=user_service, backref="employees")
-    vehicles = db.relationship("Vehicle", secondary=user_vehicle, backref="owners")
+    employees = db.relationship("Employee", backref="company", lazy=True)
+    customers = db.relationship("Customer", backref ='company', lazy=True)
+    
 
-    def __init__(self, name, surname, phone, email, password=None, role="customer", specialization=None, company_name=None):
+    # galimai nereikalingas vehicles = db.relationship("Vehicle", secondary=user_vehicle, backref="owners")
+
+    def __init__(self, name, surname, phone, email, password=None, company_name=None):
         self.name = name
         self.surname = surname
         self.phone = phone
         self.email = email
         self.password = password
-        self.role = role
-        self.specialization = specialization
         self.company_name = company_name
         
     @staticmethod
@@ -46,16 +46,11 @@ class User(db.Model):
         return query.all()
     
     @staticmethod
-    def create(data):
+    def create_user(data):
         new_user = User(**data)
         db.session.add(new_user)
         db.session.commit()
         return new_user
-    
-    def update(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
-        db.session.commit()
 
     def delete(self):
         db.session.delete(self)

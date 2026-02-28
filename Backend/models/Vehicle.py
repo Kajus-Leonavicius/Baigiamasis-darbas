@@ -1,9 +1,11 @@
 from utils.database import db
 
 class Vehicle(db.Model):
-    __tablename__ = "vehicle"
+    __tablename__ = "vehicles"
     
-    VIN = db.Column(db.String(17), unique=True, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+    VIN = db.Column(db.String(17), unique=False, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey("customers.id"), nullable=False)
     make = db.Column(db.String(100), nullable=False)
     model = db.Column(db.String(100), nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -11,7 +13,7 @@ class Vehicle(db.Model):
     Kw = db.Column(db.Integer, nullable=False)
     license_plate = db.Column(db.String(6), nullable = False)
 
-    def __init__(self, VIN, make, model, year, engine, Kw, license_plate):
+    def __init__(self, VIN, make, model, year, engine, Kw, license_plate, customer_id):
         self.VIN = VIN
         self.make = make
         self.model = model
@@ -19,18 +21,10 @@ class Vehicle(db.Model):
         self.engine = engine
         self.Kw = Kw
         self.license_plate = license_plate
-
-    def get_by_id(VIN):
-        return Vehicle.query.filter_by(VIN).first()
+        self.customer_id = customer_id
 
     @staticmethod
-    def get_all(filters={}):
-        if "VIN" in filters:
-            query = Vehicle.query.filter_by(id=filters["VIN"])
-        return query.all()
-
-    @staticmethod
-    def create(data):
+    def create_vehicle(data):
         new_vehicle = Vehicle(**data)
         db.session.add(new_vehicle)
         db.session.commit()
